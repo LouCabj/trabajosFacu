@@ -1,0 +1,112 @@
+programa ejercicio1
+procesos
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin    
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot servidor
+  variables
+    id,flores,terminado,av,ca,avInicial,caInicial:numero
+  comenzar
+    avInicial:= PosAv
+    caInicial:= PosCa
+    terminado:= 0
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    mientras(terminado < 3)
+      RecibirMensaje(id,*)
+      si(id = 1)
+        RecibirMensaje(flores, robot1)
+        si(flores > 0)
+          RecibirMensaje(av, robot1)
+          RecibirMensaje(ca, robot1)
+          Pos(av,ca)
+          repetir flores
+            depositarFlor
+          Pos(avInicial,caInicial)
+          EnviarMensaje(V, robot1)
+        sino
+          terminado:= terminado + 1    
+      si(id = 2)
+        RecibirMensaje(flores, robot2)
+        si(flores > 0)
+          RecibirMensaje(av,robot2)
+          RecibirMensaje(ca,robot2)
+          Pos(av,ca)
+          repetir flores
+            depositarFlor
+          Pos(avInicial, caInicial)
+          EnviarMensaje(V, robot2)
+        sino
+          terminado:= terminado + 1    
+      si(id = 3)
+        RecibirMensaje(flores, robot3)
+        si(flores > 0)
+          RecibirMensaje(av,robot3)
+          RecibirMensaje(ca,robot3)
+          Pos(av,ca)
+          repetir flores
+            depositarFlor
+          Pos(avInicial,caInicial)
+          EnviarMensaje(V,robot3)
+        sino
+          terminado:= terminado + 1      
+  fin
+  robot cliente
+  variables
+    id,floresEnviar,flores,calle,aux,av:numero
+    terminado,listo: boolean
+  comenzar
+    flores:= 0
+    terminado:= F
+    floresEnviar:= 0
+    RecibirMensaje(id,robot4)
+    mientras(terminado = F)
+      Random(floresEnviar,1,4)
+      calle:= PosCa
+      aux:= calle + floresEnviar
+      si(aux <= 100)
+        EnviarMensaje(id,robot4)
+        EnviarMensaje(floresEnviar,robot4)
+        av:= PosAv
+        EnviarMensaje(av, robot4)
+        calle:= PosCa + 1
+        EnviarMensaje(calle, robot4)
+        RecibirMensaje(listo, robot4)
+        mover
+        juntarFlores(flores)
+        repetir 2
+          derecha
+        mover
+        repetir 2
+          derecha  
+        repetir flores
+          depositarFlor
+          mover
+        flores:= 0
+        si(PosCa = 100)
+          terminado := V
+    EnviarMensaje(id,robot4)      
+    EnviarMensaje(0,robot4)            
+  fin
+variables
+  robot1:cliente
+  robot2:cliente
+  robot3:cliente
+  robot4:servidor
+comenzar
+  AsignarArea(robot1, ciudad)
+  AsignarArea(robot2, ciudad)
+  AsignarArea(robot3, ciudad)
+  AsignarArea(robot4, ciudad)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,1)
+  Iniciar(robot3,3,1)
+  Iniciar(robot4,100,100)
+fin      

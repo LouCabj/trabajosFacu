@@ -1,0 +1,94 @@
+programa ejercicio2
+procesos
+  proceso juntarPapeles(ES papeles:numero; E av:numero; E ca:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+      si(papeles = 5)
+        repetir papeles
+          BloquearEsquina(50,50)
+          Pos(50,50)
+          depositarPapel
+          Pos(av,ca)
+          LiberarEsquina(50,50)
+        papeles:= 0  
+  fin
+  proceso juntarConsumidores(ES papeles:numero; ES aux:numero; E papelesJuntar:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+    si(papeles < papelesJuntar)
+      repetir papeles
+        depositarPapel
+      papeles:= 0
+      aux:= aux + 1
+    sino      
+      mientras(papeles > papelesJuntar)
+        depositarPapel
+        papeles:= papeles - 1
+        aux:= 0
+  fin
+areas
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot productor
+  variables
+    papeles,av,ca:numero
+  comenzar
+    papeles:= 0
+    repetir 99
+      av:= PosAv
+      ca:= PosCa
+      juntarPapeles(papeles,av,ca)
+      mover
+    av:= PosAv
+    ca:= PosCa  
+    juntarPapeles(papeles,av,ca)        
+  fin
+  robot consumidor
+  variables
+    papelesJuntar,papeles,aux,avInicial,caInicial:numero
+  comenzar
+    aux:= 0
+    avInicial:= PosAv
+    caInicial:= PosCa
+    Random(papelesJuntar,2,5)
+    mientras(aux < 8)
+      BloquearEsquina(50,50)
+      Pos(50,50)
+      juntarConsumidores(papeles,aux,papelesJuntar)
+      Pos(avInicial,caInicial)
+      LiberarEsquina(50,50)
+      si(papeles > 0)
+        repetir papeles
+          depositarPapel
+        papeles:= 0  
+    Random(papelesJuntar,2,5)         
+  fin  
+variables
+  robot1:productor
+  robot2:productor
+  robot3:consumidor
+  robot4:consumidor    
+comenzar
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  AsignarArea(robot4,ciudad)
+  Iniciar(robot1,5,1)
+  Iniciar(robot2,10,1)
+  Iniciar(robot3,11,1)
+  Iniciar(robot4,12,1)
+fin  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

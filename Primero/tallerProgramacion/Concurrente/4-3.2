@@ -1,0 +1,95 @@
+programa ejercicio3
+procesos
+  proceso juntarPapeles(ES papelesJuntados:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papelesJuntados:= papelesJuntados + 1
+  fin
+  proceso realizarEtapa(E papeles:numero; ES llegue: boolean)
+  variables
+    papelesJuntados,calle:numero
+  comenzar
+    papelesJuntados:= 0
+    mientras(papelesJuntados < papeles) & (llegue = F)
+      juntarPapeles(papelesJuntados)
+      calle:= PosCa
+      si(PosCa < 100)
+        mover
+      sino
+        llegue:= V    
+  fin  
+areas
+  ciudad: AreaC(1,1,100,100)
+robots
+  robot coordinador
+  comenzar
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+  fin
+  robot trabajador
+  variables
+    id,papeles:numero
+    llegue,llegoUno,llegoDos:boolean
+  comenzar
+    llegue:= F
+    llegoUno:= F
+    llegoDos:= F
+    RecibirMensaje(id,robot4)
+    mientras(llegue = F)
+      Random(papeles,1,5)
+      realizarEtapa(papeles,llegue)
+      si(id = 1)
+        EnviarMensaje(llegue,robot2)
+        EnviarMensaje(llegue,robot3)
+        si(llegoUno = F)
+          RecibirMensaje(llegoUno,robot2)
+        si(llegoDos = F)  
+          RecibirMensaje(llegoDos,robot3)
+      si(id = 2)
+        EnviarMensaje(llegue,robot1)
+        EnviarMensaje(llegue,robot3)
+        si(llegoUno = F)
+          RecibirMensaje(llegoUno,robot1)
+        si(llegoDos = F)  
+          RecibirMensaje(llegoDos,robot3)
+      si(id = 3)
+        EnviarMensaje(llegue,robot1)
+        EnviarMensaje(llegue,robot2)
+        si(llegoUno = F)
+          RecibirMensaje(llegoUno,robot1)
+        si(llegoDos = F)  
+          RecibirMensaje(llegoDos,robot2)      
+  fin
+variables
+  robot1:trabajador
+  robot2:trabajador
+  robot3:trabajador
+  robot4:coordinador
+comenzar
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  AsignarArea(robot4,ciudad)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,1)
+  Iniciar(robot3,3,1)
+  Iniciar(robot4,100,100)
+fin    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

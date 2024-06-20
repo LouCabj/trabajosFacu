@@ -1,0 +1,79 @@
+programa ejercicio4
+procesos
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+  proceso juntarPapeles(ES papeles:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+  proceso vaciarBolsa(ES flores:numero; ES papeles:numero)
+  comenzar
+    repetir flores
+      depositarFlor
+    repetir papeles
+      depositarPapel
+    flores:= 0
+    papeles:= 0       
+  fin       
+areas
+  areaRobots: AreaC(1,1,3,1)
+  cuadrante: AreaPC(2,2,100,100)
+robots
+  robot jefe
+  variables
+    idEnviar,tarea:numero
+    listo:boolean
+  comenzar
+    repetir 10
+      Random(tarea,1,3)
+      Random(idEnviar,1,2)
+      si(idEnviar = 1)
+        EnviarMensaje(tarea,robot1)
+        RecibirMensaje(listo,robot1)
+      sino
+        EnviarMensaje(tarea,robot2)
+        RecibirMensaje(listo,robot2)
+    EnviarMensaje(4,robot1)
+    EnviarMensaje(4,robot2)     
+  fin
+  robot trabajador
+  variables
+    tarea,avInicial,caInicial,av,ca,flores,papeles,objetos:numero
+  comenzar
+    avInicial:= PosAv
+    caInicial:= PosCa
+    RecibirMensaje(tarea,robot3)
+    mientras(tarea <> 4)
+      Random(av,2,100)
+      Random(ca,2,100)
+      Pos(av,ca)
+      si(tarea = 1)
+        juntarFlores(flores)
+      si(tarea = 2)
+        juntarPapeles(papeles)
+      si(tarea = 3)
+        vaciarBolsa(flores,papeles)
+      Pos(avInicial,caInicial)
+      EnviarMensaje(V,robot3)
+      RecibirMensaje(tarea,robot3) 
+  fin
+variables
+  robot1: trabajador
+  robot2: trabajador
+  robot3: jefe
+comenzar
+  AsignarArea(robot1,areaRobots)
+  AsignarArea(robot1,cuadrante)
+  AsignarArea(robot2,areaRobots)
+  AsignarArea(robot2,cuadrante)
+  AsignarArea(robot3,areaRobots)
+  Iniciar(robot1,2,1)
+  Iniciar(robot2,3,1)
+  Iniciar(robot3,1,1)
+fin  

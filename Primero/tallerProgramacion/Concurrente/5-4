@@ -1,0 +1,85 @@
+programa ejercicio4
+procesos
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1 
+  fin
+areas
+  cuadrante: AreaPC(40,40,60,60)  
+  areaComun: AreaC(1,1,10,10)
+robots
+  robot florero
+  variables
+    flores,avInicial,caInicial,av,ca:numero
+    voy:boolean
+  comenzar
+    avInicial:= PosAv
+    caInicial:= PosCa
+    RecibirMensaje(voy,robot4)
+    mientras(voy = V)    
+      RecibirMensaje(av,robot4)
+      RecibirMensaje(ca,robot4)
+      BloquearEsquina(av,ca)
+      Pos(av,ca)
+      juntarFlores(flores)
+      Pos(avInicial,caInicial)
+      LiberarEsquina(av,ca)
+      RecibirMensaje(voy,robot4) 
+    repetir flores
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlor
+      Pos(avInicial,caInicial)
+      LiberarEsquina(10,10)
+    EnviarMensaje(V,robot4)
+  fin
+  robot fiscalizador
+  variables
+    av,ca,id,flores:numero
+    termine:boolean  
+  comenzar
+    repetir 8  
+      Random(id,1,3)
+      Random(av,40,60)
+      Random(ca,40,60)
+      si(id = 1)
+        EnviarMensaje(V,robot1)
+        EnviarMensaje(av,robot1)
+        EnviarMensaje(ca,robot1)
+      si(id = 2)
+        EnviarMensaje(V,robot2)
+        EnviarMensaje(av,robot2)
+        EnviarMensaje(ca,robot2)
+      si(id = 3)
+        EnviarMensaje(V,robot3)
+        EnviarMensaje(av,robot3)
+        EnviarMensaje(ca,robot3)
+    EnviarMensaje(F,robot1)
+    EnviarMensaje(F,robot2)
+    EnviarMensaje(F,robot3)
+    repetir 3
+      RecibirMensaje(termine,*)
+    Pos(10,10)
+    juntarFlores(flores)
+    Informar(flores)    
+  fin
+variables
+  robot1:florero
+  robot2:florero
+  robot3:florero
+  robot4:fiscalizador
+comenzar
+  AsignarArea(robot1,areaComun)
+  AsignarArea(robot1,cuadrante)
+  AsignarArea(robot2,areaComun)
+  AsignarArea(robot2,cuadrante)
+  AsignarArea(robot3,areaComun)
+  AsignarArea(robot3,cuadrante)
+  AsignarArea(robot4,areaComun)
+  Iniciar(robot1,1,1)
+  Iniciar(robot2,2,1)
+  Iniciar(robot3,3,1)
+  Iniciar(robot4,4,1)
+fin

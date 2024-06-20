@@ -1,0 +1,141 @@
+programa ejercicio1
+procesos
+  proceso juntarPapeles(ES papeles:numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+  proceso recorrerAvenida(ES flores:numero)
+  variables
+    av,ca:numero
+  comenzar
+    repetir 96
+      juntarFlores(flores)
+      mover
+    juntarFlores(flores)
+    av:= PosAv
+    ca:= PosCa + 1
+    BloquearEsquina(av,ca)
+    mover
+    juntarFlores(flores)
+    BloquearEsquina(av,ca + 1)
+    mover
+    LiberarEsquina(av,ca)
+    juntarFlores(flores)
+    mover
+    LiberarEsquina(av,ca + 1)
+    juntarFlores(flores)  
+  fin
+  proceso recorrerCalle(ES papeles:numero)
+  variables
+    av,ca:numero
+  comenzar
+    ca:=PosCa
+    juntarPapeles(papeles)
+    av:=PosAv + 1
+    BloquearEsquina(av,ca)
+    mover
+    juntarPapeles(papeles)
+    BloquearEsquina(av + 1, ca)
+    mover
+    LiberarEsquina(av,ca)
+    juntarPapeles(papeles)
+    mover
+    LiberarEsquina(av + 1,ca) 
+    repetir 95
+      juntarPapeles(papeles)
+      mover
+    juntarPapeles(papeles)  
+  fin    
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot fiscalizador
+  variables
+    papeles,flores,papelesTotal,floresTotal,id:numero
+  comenzar
+    floresTotal:= 0
+    papelesTotal:= 0
+    EnviarMensaje(1,R1)
+    EnviarMensaje(2,R2)
+    EnviarMensaje(3,A1)
+    EnviarMensaje(4,A2)
+    repetir 4
+      RecibirMensaje(id,*)
+      si(id = 1)
+        RecibirMensaje(flores,R1)
+        floresTotal:= floresTotal + flores
+      si(id = 2)
+        RecibirMensaje(flores,R2)
+        floresTotal:= floresTotal + flores
+      si(id = 3)
+        RecibirMensaje(papeles,A1)
+        papelesTotal:= papelesTotal + papeles
+      si(id = 4)
+        RecibirMensaje(papeles,A2)
+        papelesTotal:= papelesTotal + papeles
+    si(papelesTotal > floresTotal)
+      Informar(2)
+    sino
+      Informar(1)     
+  fin
+  robot rojo
+  variables
+    id,flores:numero
+  comenzar
+    RecibirMensaje(id,robot5)
+    recorrerAvenida(flores)
+    EnviarMensaje(id,robot5)
+    EnviarMensaje(flores,robot5)
+  fin
+  robot azul
+  variables
+    id,papeles:numero
+  comenzar
+    derecha
+    RecibirMensaje(id,robot5)
+    recorrerCalle(papeles)
+    EnviarMensaje(id,robot5)
+    EnviarMensaje(papeles,robot5)   
+  fin
+variables
+  R1:rojo
+  R2:rojo
+  A1:azul
+  A2:azul
+  robot5:fiscalizador
+comenzar
+  AsignarArea(R1,ciudad)
+  AsignarArea(R2,ciudad)
+  AsignarArea(A1,ciudad)
+  AsignarArea(A2,ciudad)
+  AsignarArea(robot5,ciudad)
+  Iniciar(R1,2,1)
+  Iniciar(R2,3,1)
+  Iniciar(A1,1,98)
+  Iniciar(A2,1,99)
+  Iniciar(robot5,1,100)
+fin    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

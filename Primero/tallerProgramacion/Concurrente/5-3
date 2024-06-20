@@ -1,0 +1,84 @@
+programa ejercicio3
+procesos
+  proceso juntarFlores(ES flores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin
+  proceso limpiar(ES flores:numero)
+  variables
+    avInicial,caInicial:numero
+  comenzar
+    avInicial:=PosAv
+    caInicial:=PosCa
+    repetir flores
+      BloquearEsquina(10,10)
+      Pos(10,10)
+      depositarFlor
+      Pos(avInicial,caInicial)
+      LiberarEsquina(10,10)
+    flores:= 0
+    EnviarMensaje(F,robot3) 
+  fin
+  proceso juntarRecolectores(ES flores:numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+      si(flores = 10)
+        limpiar(flores)
+  fin
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot recolector
+  variables
+    flores:numero
+  comenzar
+    derecha
+    flores:= 0
+    juntarRecolectores(flores)
+    repetir 4
+      mover
+      juntarRecolectores(flores)
+    limpiar(flores)
+    repetir 19
+      repetir 5
+        mover
+        juntarRecolectores(flores)
+      limpiar(flores)    
+    EnviarMensaje(V,robot3)
+  fin
+  robot cosechador
+  variables
+    avisos,avInicial,caInicial,flores:numero
+    listo:boolean
+  comenzar
+    avInicial:= PosAv
+    caInicial:= PosCa
+    avisos:= 0
+    mientras(avisos < 2)
+      RecibirMensaje(listo,*)
+      si(listo = V)
+        avisos:= avisos + 1
+      sino
+        BloquearEsquina(10,10)
+        Pos(10,10)
+        juntarFlores(flores)
+        Pos(avInicial,caInicial)
+        LiberarEsquina(10,10)
+    Informar(flores)  
+  fin
+variables
+  robot1:recolector
+  robot2:recolector
+  robot3:cosechador
+comenzar
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  Iniciar(robot1,1,3)
+  Iniciar(robot2,1,4)
+  Iniciar(robot3,1,5)
+fin    

@@ -1,0 +1,64 @@
+programa ejercicio5
+areas
+  ciudad:AreaC(1,1,100,100)
+robots
+  robot cliente
+  variables
+    papeles,avInicial,caInicial,id:numero
+  comenzar
+    RecibirMensaje(id,robot4)
+    avInicial:= PosAv
+    caInicial:= PosCa
+    repetir 4
+      EnviarMensaje(id,robot4)
+      RecibirMensaje(papeles,robot4)
+      repetir papeles
+        Pos(100,1)
+        tomarPapel
+        Pos(avInicial,caInicial)
+        depositarPapel
+      papeles:=0
+      EnviarMensaje(V,robot4)            
+  fin
+  robot servidor
+  variables
+    id,papeles,avInicial,caInicial:numero
+    listo:boolean
+  comenzar
+    avInicial:= PosAv
+    caInicial:= PosCa
+    EnviarMensaje(1,robot1)
+    EnviarMensaje(2,robot2)
+    EnviarMensaje(3,robot3)
+    repetir 12
+      Random(papeles,1,5)
+      Pos(100,1)
+      repetir papeles
+        depositarPapel
+      Pos(avInicial,caInicial)  
+      RecibirMensaje(id,*)  
+      si(id = 1)
+        EnviarMensaje(papeles,robot1)
+        RecibirMensaje(listo,robot1)
+      si(id = 2)
+        EnviarMensaje(papeles,robot2)
+        RecibirMensaje(listo,robot2)
+      si(id = 3)
+        EnviarMensaje(papeles,robot3)
+        RecibirMensaje(listo,robot3) 
+  fin
+variables
+  robot1:cliente
+  robot2:cliente
+  robot3:cliente
+  robot4:servidor
+comenzar
+  AsignarArea(robot1,ciudad)
+  AsignarArea(robot2,ciudad)
+  AsignarArea(robot3,ciudad)
+  AsignarArea(robot4,ciudad)
+  Iniciar(robot1,10,1)
+  Iniciar(robot2,11,1)
+  Iniciar(robot3,12,1)
+  Iniciar(robot4,13,1)
+fin      
